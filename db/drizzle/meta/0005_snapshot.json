@@ -1,0 +1,79 @@
+{
+  "id": "0888cc4b-a707-4662-b920-5730ba78850f",
+  "prevId": "01a822b6-b356-4e35-b11e-cbb6c3f0c94d",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "link": {
+      "name": "link",
+      "schema": "",
+      "columns": {
+        "short_link": {
+          "name": "short_link",
+          "type": "varchar(32)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "full_link": {
+          "name": "full_link",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user": {
+          "name": "user",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "link_user_user_id_fk": {
+          "name": "link_user_user_id_fk",
+          "tableFrom": "link",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

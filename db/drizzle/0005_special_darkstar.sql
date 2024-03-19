@@ -1,0 +1,1 @@
+ALTER TABLE "link" ALTER COLUMN "created_at" DROP DEFAULT;

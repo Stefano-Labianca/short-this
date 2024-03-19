@@ -1,0 +1,48 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709136699933,
+      "tag": "0000_silent_strong_guy",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709145838996,
+      "tag": "0001_aberrant_fixer",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709145891932,
+      "tag": "0002_sharp_scalphunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709158783088,
+      "tag": "0003_organic_monster_badoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709328064493,
+      "tag": "0004_material_lethal_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1709330205491,
+      "tag": "0005_special_darkstar",
+      "breakpoints": true
+    }
+  ]
+}

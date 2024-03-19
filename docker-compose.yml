@@ -1,0 +1,21 @@
+version: '3.8'
+name: short-this-stack
+
+services:
+  db:
+    container_name: 'short-this-db'
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: short_links
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+volumes:
+  dbdata:
+    driver: local

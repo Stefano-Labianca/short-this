@@ -1,0 +1,1 @@
+ALTER TABLE "link" ALTER COLUMN "user" SET DATA TYPE char(10);
