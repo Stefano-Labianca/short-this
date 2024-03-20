@@ -40,6 +40,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@vercel/postgres": "^0.7.2",
 		"dotenv": "^16.4.5",
 		"drizzle-orm": "^0.29.4",
 		"lucide-svelte": "^0.343.0",
