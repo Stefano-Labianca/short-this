@@ -6,6 +6,7 @@
 	import { slide } from 'svelte/transition';
 	import {
 		Button,
+		Dialog,
 		EmptyState,
 		Form,
 		Label,
@@ -15,6 +16,7 @@
 		alerts
 	} from 'virtue-ui';
 	import type { PageServerData } from './$types';
+	import { writable } from 'svelte/store';
 
 	export let data: PageServerData;
 
@@ -23,6 +25,9 @@
 	function copy(shortLink: string) {
 		navigator.clipboard.writeText(shortLink);
 	}
+
+	const openDialog = writable<boolean>(false)
+
 </script>
 
 <Toasts />
@@ -48,8 +53,6 @@
 			- [] Rimozione singola
 			- [] Rimozione multipla
 		- [] Convalida form di inserimento dei link
-		- [] Provare a sostituire il +page.server.ts (cartella /[id]) con un +server.ts
-		così da non avere un +page.svelte a caso vuoto
 	-->
 
 	<Tabs.Root class="space-y-8">
@@ -169,4 +172,23 @@
 			{/if}
 		</Tabs.Content>
 	</Tabs.Root>
+
+	
+	<Dialog.Root open={openDialog}> 
+		<Dialog.Portal>
+		  <Dialog.Overlay />
+		  <Dialog.Content>
+			<Dialog.Header>
+			  <Dialog.Title>Title</Dialog.Title>
+			  <Dialog.Description>Description</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer>
+			  <Dialog.Close>
+				<Button.Root>Close</Button.Root>
+			  </Dialog.Close>
+			</Dialog.Footer>
+		  </Dialog.Content>
+		</Dialog.Portal>
+	</Dialog.Root>
+
 </div>
