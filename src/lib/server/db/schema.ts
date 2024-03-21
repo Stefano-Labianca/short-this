@@ -5,7 +5,7 @@ export const user = pgTable('user', {
 });
 
 export const link = pgTable('link', {
-	shortLink: varchar('short_link', { length: 32 }).primaryKey().notNull(),
+	shortLink: varchar('short_link', { length: 40 }).primaryKey().notNull(),
 	fullLink: varchar('full_link', { length: 256 }).notNull(),
 	createdAt: date('created_at').notNull(),
 	user: char('user', { length: 10 })

@@ -43,6 +43,13 @@
       "when": 1709330205491,
       "tag": "0005_special_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1711023487155,
+      "tag": "0006_massive_sersi",
+      "breakpoints": true
     }
   ]
 }

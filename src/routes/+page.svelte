@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Toasts from '$lib/Toasts/Toasts.svelte';
+	import Toasts from '$lib/components/Toasts.svelte';
 	import { Copy, Trash2, Unlink } from 'lucide-svelte';
 	import { flip } from 'svelte/animate';
+	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import {
 		Button,
@@ -16,7 +17,6 @@
 		alerts
 	} from 'virtue-ui';
 	import type { PageServerData } from './$types';
-	import { writable } from 'svelte/store';
 
 	export let data: PageServerData;
 
@@ -26,8 +26,7 @@
 		navigator.clipboard.writeText(shortLink);
 	}
 
-	const openDialog = writable<boolean>(false)
-
+	const openDialog = writable<boolean>(false);
 </script>
 
 <Toasts />
@@ -173,22 +172,20 @@
 		</Tabs.Content>
 	</Tabs.Root>
 
-	
-	<Dialog.Root open={openDialog}> 
+	<Dialog.Root open={openDialog}>
 		<Dialog.Portal>
-		  <Dialog.Overlay />
-		  <Dialog.Content>
-			<Dialog.Header>
-			  <Dialog.Title>Title</Dialog.Title>
-			  <Dialog.Description>Description</Dialog.Description>
-			</Dialog.Header>
-			<Dialog.Footer>
-			  <Dialog.Close>
-				<Button.Root>Close</Button.Root>
-			  </Dialog.Close>
-			</Dialog.Footer>
-		  </Dialog.Content>
+			<Dialog.Overlay />
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>Title</Dialog.Title>
+					<Dialog.Description>Description</Dialog.Description>
+				</Dialog.Header>
+				<Dialog.Footer>
+					<Dialog.Close>
+						<Button.Root>Close</Button.Root>
+					</Dialog.Close>
+				</Dialog.Footer>
+			</Dialog.Content>
 		</Dialog.Portal>
 	</Dialog.Root>
-
 </div>

@@ -1,0 +1,1 @@
+ALTER TABLE "link" ALTER COLUMN "short_link" SET DATA TYPE varchar(40);
