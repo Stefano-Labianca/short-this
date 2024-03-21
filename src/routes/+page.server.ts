@@ -1,5 +1,5 @@
-import { db } from '$database/client';
-import * as schema from '$database/schema';
+import { db } from '$lib/server/db/client';
+import * as schema from '$lib/server/db/schema';
 import type { Actions } from '@sveltejs/kit';
 import { desc, eq } from 'drizzle-orm';
 import { nanoid } from 'nanoid';

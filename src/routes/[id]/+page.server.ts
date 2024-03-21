@@ -1,5 +1,5 @@
-import { db } from '$database/client';
-import * as schema from '$database/schema';
+import { db } from '$lib/server/db/client';
+import * as schema from '$lib/server/db/schema';
 import { redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
