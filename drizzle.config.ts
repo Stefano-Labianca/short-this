@@ -5,10 +5,6 @@ dotenv.config({
 	path: '.env.local'
 });
 
-// dotenv.config({
-// 	path: '.env.development.local'
-// });
-
 export default {
 	schema: './src/lib/server/db/schema.ts',
 	out: './src/lib/server/db/drizzle',
