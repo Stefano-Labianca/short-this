@@ -1,9 +1,13 @@
 import { db } from '$lib/server/db/client';
 import * as schema from '$lib/server/db/schema';
-import type { Actions } from '@sveltejs/kit';
+import { type Actions } from '@sveltejs/kit';
 import { desc, eq } from 'drizzle-orm';
-import { nanoid } from 'nanoid';
 import type { PageServerLoad } from './$types';
+
+import { nanoid } from 'nanoid';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
 
 type Link = {
 	fullLink: string;
@@ -11,7 +15,13 @@ type Link = {
 	createdAt: string;
 };
 
-export const load: PageServerLoad = async ({ locals }) => {
+const validationSchema = z.object({
+	fullLink: z.string().url('Invalid URL')
+});
+
+export const load: PageServerLoad = async ({ request, locals }) => {
+	const form = await superValidate(request, zod(validationSchema));
+
 	const id = locals.userID;
 	const { link } = schema;
 	const { user: userID } = link;
@@ -27,14 +37,21 @@ export const load: PageServerLoad = async ({ locals }) => {
 		.orderBy(desc(link.createdAt));
 
 	return {
-		links
+		links,
+		form
 	};
 };
 
 export const actions: Actions = {
 	save: async ({ request, url, locals }) => {
-		const data = await request.formData();
-		const fullLink = data.get('originalUrl') as string;
+		const form = await superValidate(request, zod(validationSchema));
+		console.log('form save action: ', form);
+
+		if (!form.valid) {
+			return { form };
+		}
+
+		const fullLink = form.data.fullLink;
 		const shortLink = url.origin + '/' + nanoid(7);
 		const userID = locals.userID;
 
@@ -50,6 +67,8 @@ export const actions: Actions = {
 			createdAt: new Date().toUTCString(),
 			user: userID
 		});
+
+		return { form };
 	},
 
 	delete: async ({ request }) => {

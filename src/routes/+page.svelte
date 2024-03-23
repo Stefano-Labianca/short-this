@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import Toasts from '$lib/components/Toasts.svelte';
 	import { Copy, Trash2, Unlink } from 'lucide-svelte';
 	import { flip } from 'svelte/animate';
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
+	import { superForm } from 'sveltekit-superforms';
+	import type { PageServerData } from './$types';
+
 	import {
 		Button,
 		Dialog,
@@ -16,11 +20,14 @@
 		TextField,
 		alerts
 	} from 'virtue-ui';
-	import type { PageServerData } from './$types';
 
 	export let data: PageServerData;
 
+	const { errors, enhance: actionEnhance } = superForm($page.data.form);
+
 	$: links = data.links;
+
+	let creating = false;
 
 	function copy(shortLink: string) {
 		navigator.clipboard.writeText(shortLink);
@@ -51,7 +58,7 @@
 		- [] Modale per conferma di rimozione del record
 			- [] Rimozione singola
 			- [] Rimozione multipla
-		- [] Convalida form di inserimento dei link
+		- [X] Convalida form di inserimento dei link
 	-->
 
 	<Tabs.Root class="space-y-8">
@@ -61,29 +68,27 @@
 		</Tabs.List>
 
 		<Tabs.Content value="create">
-			<Form.Root method="POST" action="?/save" {enhance}>
+			<Form.Root method="POST" action="?/save" enhance={actionEnhance}>
 				<Form.Fields>
 					<TextField.Root>
 						<TextField.Label for="url">Your URL</TextField.Label>
 						<TextField.Input
+							disabled={creating}
 							id="url"
-							required
-							type="url"
-							name="originalUrl"
+							name="fullLink"
 							placeholder="e.g. https://example.com"
 						/>
+						{#if $errors?.fullLink}
+							<div transition:slide|local={TRANSITION_BASE}>
+								<TextField.Message variant="error">
+									{$errors.fullLink}
+								</TextField.Message>
+							</div>
+						{/if}
 					</TextField.Root>
 				</Form.Fields>
 				<Form.Controls>
-					<Button.Root
-						variant="successFilled"
-						type="submit"
-						on:click={() =>
-							alerts.add({
-								title: 'Link created successfully',
-								variant: 'success'
-							})}
-					>
+					<Button.Root variant="successFilled" type="submit">
 						Submit
 					</Button.Root>
 				</Form.Controls>
