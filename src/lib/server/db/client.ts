@@ -1,12 +1,12 @@
-// import { drizzle } from 'drizzle-orm/postgres-js';
-// import postgres from 'postgres';
-// const connectionString = 'postgres://user:postgres@localhost:5432/short_links';
-// const queryClient = postgres(connectionString);
-
-// export const db = drizzle(queryClient, { schema });
-
-import { sql } from '@vercel/postgres';
-import { drizzle } from 'drizzle-orm/vercel-postgres';
+import * as dotenv from 'dotenv';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 import * as schema from './schema';
 
-export const db = drizzle(sql, { schema });
+dotenv.config({
+	path: '.env.local'
+});
+
+const queryClient = postgres(process.env.LOCAL_POSTGRES_URL as string);
+
+export const db = drizzle(queryClient, { schema });
