@@ -23,8 +23,6 @@
 
 	export let data: PageServerData;
 
-	const { errors, enhance: actionEnhance } = superForm($page.data.form);
-
 	$: links = data.links;
 
 	let creating = false;
@@ -34,6 +32,17 @@
 	}
 
 	const openDialog = writable<boolean>(false);
+
+	const { errors, enhance: actionEnhance } = superForm($page.data.form, {
+		onUpdated({ form }) {
+			if (form.valid) {
+				alerts.add({
+					title: 'Link uploaded successfully',
+					variant: 'success'
+				});
+			}
+		}
+	});
 </script>
 
 <Toasts />
