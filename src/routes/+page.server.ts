@@ -45,7 +45,6 @@ export const load: PageServerLoad = async ({ request, locals }) => {
 export const actions: Actions = {
 	save: async ({ request, url, locals }) => {
 		const form = await superValidate(request, zod(validationSchema));
-		console.log('form save action: ', form);
 
 		if (!form.valid) {
 			return { form };

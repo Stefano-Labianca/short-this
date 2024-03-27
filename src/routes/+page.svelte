@@ -2,7 +2,9 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import Toasts from '$lib/components/Toasts.svelte';
-	import { Copy, Trash2, Unlink } from 'lucide-svelte';
+	import Copy from 'lucide-svelte/icons/copy';
+	import Trash2 from 'lucide-svelte/icons/trash-2';
+	import Unlink from 'lucide-svelte/icons/unlink';
 	import { flip } from 'svelte/animate';
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';

@@ -7,6 +7,12 @@ dotenv.config({
 	path: '.env'
 });
 
-const queryClient = postgres(process.env.LOCAL_POSTGRES_URL as string);
+const queryClient = postgres({
+	port: process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT) : 5432,
+	host: process.env.POSTGRES_LOCALHOST as string,
+	user: process.env.POSTGRES_USER as string,
+	password: process.env.POSTGRES_PASSWORD as string,
+	database: process.env.POSTGRES_DB as string
+});
 
 export const db = drizzle(queryClient, { schema });

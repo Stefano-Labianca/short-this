@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { X } from 'lucide-svelte';
+	import X from 'lucide-svelte/icons/x';
 	import { flip } from 'svelte/animate';
 	import { Alert, TRANSITION_BASE, alerts } from 'virtue-ui';
 </script>
@@ -25,6 +25,7 @@
 		@apply left-0;
 		@apply w-full;
 		@apply p-4;
+		@apply z-50;
 
 		@apply flex;
 		@apply flex-col;
