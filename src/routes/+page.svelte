@@ -50,7 +50,7 @@
 	);
 
 	const { enhance: removeLinkFormEnhance } = superForm(data.removeLinkForm, {
-		onSubmit: () => {
+		onUpdate: () => {
 			alerts.add({
 				title: 'Link removed successfully',
 				variant: 'error'
@@ -61,7 +61,7 @@
 
 <Toasts />
 
-<div class="mt-24 mx-12">
+<div class="mt-24 mx-12 max-w-2xl">
 	<h1 class="flex justify-center items-center text-4xl font-bold mb-10">
 		Short This
 	</h1>
