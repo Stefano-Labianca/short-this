@@ -15,12 +15,17 @@ type Link = {
 	createdAt: string;
 };
 
-const validationSchema = z.object({
+const fullLinkSchema = z.object({
 	fullLink: z.string().url('Invalid URL')
 });
 
+const removeLinkSchema = z.object({
+	shortLink: z.string().url()
+});
+
 export const load: PageServerLoad = async ({ request, locals }) => {
-	const form = await superValidate(request, zod(validationSchema));
+	const linkForm = await superValidate(request, zod(fullLinkSchema));
+	const removeLinkForm = await superValidate(request, zod(removeLinkSchema));
 
 	const id = locals.userID;
 	const { link } = schema;
@@ -38,19 +43,20 @@ export const load: PageServerLoad = async ({ request, locals }) => {
 
 	return {
 		links,
-		form
+		linkForm,
+		removeLinkForm
 	};
 };
 
 export const actions: Actions = {
 	save: async ({ request, url, locals }) => {
-		const form = await superValidate(request, zod(validationSchema));
+		const saveForm = await superValidate(request, zod(fullLinkSchema));
 
-		if (!form.valid) {
-			return { form };
+		if (!saveForm.valid) {
+			return { saveForm };
 		}
 
-		const fullLink = form.data.fullLink;
+		const fullLink = saveForm.data.fullLink;
 		const shortLink = url.origin + '/' + nanoid(7);
 		const userID = locals.userID;
 
@@ -67,15 +73,22 @@ export const actions: Actions = {
 			user: userID
 		});
 
-		return { form };
+		return { saveForm };
 	},
 
 	delete: async ({ request }) => {
-		const data = await request.formData();
-		const shortLink = data.get('shortLink') as string;
+		const removeLinkForm = await superValidate(request, zod(removeLinkSchema));
+
+		if (!removeLinkForm.valid) {
+			return { removeLinkForm };
+		}
+
+		const shortLink = removeLinkForm.data.shortLink;
 		const { link } = schema;
 
 		await db.delete(link).where(eq(link.shortLink, shortLink));
+
+		return { removeLinkForm };
 	}
 };
 

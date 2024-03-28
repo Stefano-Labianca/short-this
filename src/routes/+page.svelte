@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
 	import Toasts from '$lib/components/Toasts.svelte';
 	import Copy from 'lucide-svelte/icons/copy';
 	import Trash2 from 'lucide-svelte/icons/trash-2';
@@ -28,6 +27,7 @@
 	$: links = data.links;
 
 	let creating = false;
+	let selectedLink = '';
 
 	function copy(shortLink: string) {
 		navigator.clipboard.writeText(shortLink);
@@ -35,14 +35,26 @@
 
 	const openDialog = writable<boolean>(false);
 
-	const { errors, enhance: actionEnhance } = superForm($page.data.form, {
-		onUpdated({ form }) {
-			if (form.valid) {
-				alerts.add({
-					title: 'Link uploaded successfully',
-					variant: 'success'
-				});
+	const { errors: linkFormErrors, enhance: linkFormEnhance } = superForm(
+		data.linkForm,
+		{
+			onUpdated({ form }) {
+				if (form.valid) {
+					alerts.add({
+						title: 'Link uploaded successfully',
+						variant: 'success'
+					});
+				}
 			}
+		}
+	);
+
+	const { enhance: removeLinkFormEnhance } = superForm(data.removeLinkForm, {
+		onSubmit: () => {
+			alerts.add({
+				title: 'Link removed successfully',
+				variant: 'error'
+			});
 		}
 	});
 </script>
@@ -67,7 +79,7 @@
 			- [X] Copia
 		- [] Rimozione automatica dei link dopo 7 giorni
 		- [] Modale per conferma di rimozione del record
-			- [] Rimozione singola
+			- [X] Rimozione singola
 			- [] Rimozione multipla
 		- [X] Convalida form di inserimento dei link
 	-->
@@ -79,7 +91,7 @@
 		</Tabs.List>
 
 		<Tabs.Content value="create">
-			<Form.Root method="POST" action="?/save" enhance={actionEnhance}>
+			<Form.Root method="POST" action="?/save" enhance={linkFormEnhance}>
 				<Form.Fields>
 					<TextField.Root>
 						<TextField.Label for="url">Your URL</TextField.Label>
@@ -89,10 +101,10 @@
 							name="fullLink"
 							placeholder="e.g. https://example.com"
 						/>
-						{#if $errors?.fullLink}
+						{#if $linkFormErrors?.fullLink}
 							<div transition:slide|local={TRANSITION_BASE}>
 								<TextField.Message variant="error">
-									{$errors.fullLink}
+									{$linkFormErrors.fullLink}
 								</TextField.Message>
 							</div>
 						{/if}
@@ -100,7 +112,7 @@
 				</Form.Fields>
 				<Form.Controls>
 					<Button.Root variant="successFilled" type="submit">
-						Submit
+						Short this!
 					</Button.Root>
 				</Form.Controls>
 			</Form.Root>
@@ -137,10 +149,10 @@
 								{link.shortLink}
 							</Button.Root>
 
-							<div class="flex flex-row justify-evenly mt-4 gap-x-2">
+							<div class="w-full flex flex-row justify-evenly mt-4 gap-x-2">
 								<Button.Root
-									class="w-full"
 									variant="info"
+									class="w-full"
 									on:click={() => {
 										copy(link.shortLink);
 										alerts.add({
@@ -151,35 +163,17 @@
 								>
 									<Copy size={20} />
 								</Button.Root>
-
-								<Form.Root
-									class="w-full gap-0"
-									{enhance}
-									method="POST"
-									action="?/delete"
+								<Button.Root
+									class="w-full"
+									type="submit"
+									variant="error"
+									on:click={() => {
+										$openDialog = true;
+										selectedLink = link.shortLink;
+									}}
 								>
-									<Form.Fields>
-										<TextField.Input
-											type="hidden"
-											value={link.shortLink}
-											name="shortLink"
-										/>
-									</Form.Fields>
-
-									<Form.Controls>
-										<Button.Root
-											type="submit"
-											variant="error"
-											on:click={() =>
-												alerts.add({
-													title: 'Link removed successfully',
-													variant: 'error'
-												})}
-										>
-											<Trash2 size={20} />
-										</Button.Root>
-									</Form.Controls>
-								</Form.Root>
+									<Trash2 size={20} />
+								</Button.Root>
 							</div>
 						</div>
 					{/each}
@@ -193,12 +187,35 @@
 			<Dialog.Overlay />
 			<Dialog.Content>
 				<Dialog.Header>
-					<Dialog.Title>Title</Dialog.Title>
-					<Dialog.Description>Description</Dialog.Description>
+					<Dialog.Title>Watch Out!</Dialog.Title>
+					<Dialog.Description>
+						Do you want to remove this link?
+					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Footer>
-					<Dialog.Close>
-						<Button.Root>Close</Button.Root>
+					<Dialog.Close class="w-full flex flex-row gap-3 justify-between">
+						<Button.Root class="w-full">Close</Button.Root>
+
+						<Form.Root
+							class="w-full gap-0"
+							enhance={removeLinkFormEnhance}
+							method="POST"
+							action="?/delete"
+						>
+							<Form.Fields>
+								<TextField.Input
+									type="hidden"
+									name="shortLink"
+									value={selectedLink}
+								/>
+							</Form.Fields>
+
+							<Form.Controls>
+								<Button.Root class="w-full" type="submit" variant="error">
+									Remove
+								</Button.Root>
+							</Form.Controls>
+						</Form.Root>
 					</Dialog.Close>
 				</Dialog.Footer>
 			</Dialog.Content>
